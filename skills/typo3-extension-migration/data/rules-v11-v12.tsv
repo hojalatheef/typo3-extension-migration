@@ -1,0 +1,78 @@
+id	target	level	ext	regex	hint
+v11-vendor-extension-name	11	breaking	php	^[[:space:]]*'[A-Z][A-Za-z0-9]*\.[A-Z][A-Za-z0-9.]*'[[:space:]]*,	configurePlugin/registerModule: drop vendor prefix from extension name, key controllers by FQCN
+v11-extbase-response-api	11	breaking	php	\$this->response->(setHeader|appendContent|setContent|setStatus|getContent|addAdditionalHeaderData)	Extbase handles PSR-7 only: return $this->htmlResponse()->withHeader()/withStatus()
+v11-fluid-widgets	11	removed	php,html	f:widget\.|AbstractWidgetController|AbstractWidgetViewHelper	Fluid widgets removed: use Pagination API (QueryResultPaginator + SimplePagination)
+v11-cachehash-args	11	removed	php,html,typoscript	useCacheHash|noCacheHash|setUseCacheHash	Remove useCacheHash/noCacheHash; cHash is added automatically
+v11-template-cobject	11	removed	typoscript	=[[:space:]]*TEMPLATE[[:space:]]*$	TEMPLATE cObject removed: use FLUIDTEMPLATE
+v11-resourcefactory-getinstance	11	removed	php	ResourceFactory::getInstance\(	Inject ResourceFactory or GeneralUtility::makeInstance(ResourceFactory::class)
+v11-workspace-placeholder-columns	11	removed	php	shadowColumnsForNewPlaceholders|shadowColumnsForMovePlaceholders	Delete ctrl.shadowColumnsFor*Placeholders (placeholders removed)
+v11-session-id	11	breaking	php	fe_user->id([^a-zA-Z_]|$)|BE_USER'\]->id([^a-zA-Z_]|$)|->(getSessionId|createSessionId)\(	Use $user->getSession()->getIdentifier()
+v11-httputility-redirect	11	deprecated	php	HttpUtility::(redirect|setResponseCode|setResponseCodeAndExit)\(	Return a PSR-7 RedirectResponse or throw PropagateResponseException
+v11-public-cobj	11	deprecated	php	public \$cObj	Make $cObj protected and add setContentObjectRenderer()
+v11-tca-special-languages	11	deprecated	php	'special'[[:space:]]*=>[[:space:]]*'languages'|'foreign_table'[[:space:]]*=>[[:space:]]*'sys_language'	Use TCA 'type' => 'language'
+v11-tca-filefolder	11	deprecated	php	'fileFolder(_extList|_recursions)?'[[:space:]]*=>	Use 'fileFolderConfig' => ['folder', 'allowedExtensions', 'depth']
+v11-tca-rootuid	11	deprecated	php	'rootUid'[[:space:]]*=>	treeConfig: use 'startingPoints'
+v11-languageservice-container	11	deprecated	php	(makeInstance|get)\(LanguageService::class	Use LanguageServiceFactory::createFrom*()
+v11-commands-php	11	removed	php	'class'[[:space:]]*=>[[:space:]]*[A-Za-z0-9_\\]*Command::class	Configuration/Commands.php removed: tag commands with console.command in Services.yaml
+v12-typo3-mode-constants	12	removed	php	TYPO3_MODE|TYPO3_REQUESTTYPE	defined('TYPO3') or die(); use ApplicationType::fromRequest()
+v12-typo3-version-constants	12	removed	php	TYPO3_version|TYPO3_branch	Use TYPO3\CMS\Core\Information\Typo3Version
+v12-environmentservice	12	removed	php	EnvironmentService|isEnvironmentInFrontendMode|isEnvironmentInBackendMode	Use ApplicationType::fromRequest($request)
+v12-objectmanager	12	removed	php	ObjectManager(Interface)?::class|->objectManager->get\(|Extbase\\Object\\ObjectManager	ObjectManager removed: constructor DI via Services.yaml or GeneralUtility::makeInstance
+v12-inject-annotation	12	removed	php	@(TYPO3\\CMS\\Extbase\\Annotation\\Inject|Extbase\\Inject|inject)([[:space:]]|$)	@inject removed: use constructor or inject*() method injection
+v12-signalslot	12	removed	php	SignalSlot\\Dispatcher	SignalSlot removed: dispatch PSR-14 events, register listeners with event.listener tag
+v12-extbase-viewinterface	12	removed	php	TYPO3\\CMS\\Extbase\\Mvc\\View\\(ViewInterface|AbstractView|EmptyView)	Use TYPO3Fluid\Fluid\View\ViewInterface
+v12-controller-context	12	removed	php	getControllerContext\(|ControllerContext	Use $this->request / $this->uriBuilder directly
+v12-extbase-request-baseuri	12	removed	php	->(getBaseUri|getRequestUri)\(	Use $request->getAttribute('normalizedParams')
+v12-generic-user-models	12	removed	php	TYPO3\\CMS\\Extbase\\Domain\\(Model|Repository)\\(FrontendUser|FrontendUserGroup|BackendUser|BackendUserGroup)	Ship own fe_users/fe_groups model and repository
+v12-forward	12	removed	php	\$this->forward\(	Return new ForwardResponse('action')
+v12-action-without-response	12	breaking	php	public function [a-zA-Z0-9]+Action\([^)]*\)[[:space:]]*(:[[:space:]]*void)?[[:space:]]*$	Actions must declare : ResponseInterface and return $this->htmlResponse()
+v12-redirect-not-returned	12	breaking	php	^[[:space:]]*\$this->redirect(ToUri)?\(|StopActionException	return $this->redirect(...); StopActionException removed
+v12-backend-template-view	12	removed	php	BackendTemplateView	Use ModuleTemplateFactory->create($request)
+v12-viewonclick	12	removed	php	viewOnClick\(	Use PreviewUriBuilder
+v12-be-container	12	removed	html	f:be\.container|f:be\.moduleLayout	Render through ModuleTemplate + Fluid layout
+v12-getinstance	12	removed	php	::getInstance\(\)	Singleton getInstance() removed: inject or GeneralUtility::makeInstance()
+v12-generalutility-helpers	12	removed	php	GeneralUtility::(uniqueList|rmFromList|shortMD5|isFirstPartOfStr|isAbsPath|stdAuthCode|compileSelectedGetVarsFromArray|minifyJavaScript)\(|StringUtility::(beginsWith|endsWith)\(	Use StringUtility::uniqueList, str_starts_with, PathUtility::isAbsolutePath, native functions
+v12-categorizable	12	removed	php	makeCategorizable\(|CategoryRegistry|defaultCategorizedTables	Use TCA 'type' => 'category'
+v12-tsfe-atagparams	12	removed	php	TSFE'\]->ATagParams	Use $GLOBALS['TSFE']->config['config']['ATagParams']
+v12-module-registration	12	removed	php	ExtensionUtility::registerModule\(|ExtensionManagementUtility::(addModule|addModulePath|insertModuleFunction)\(|TBE_MODULES	Register modules in Configuration/Backend/Modules.php
+v12-moduletemplate-old-api	12	deprecated	php	->(setContent|renderContent)\(	Use $moduleTemplate->assign() + renderResponse('Template')
+v12-add-javascript-code	12	removed	php	->addJavaScriptCode\(	Move inline JS into an ES module; loadJavaScriptModule()
+v12-csh	12	removed	php,html	addLLrefForTCAdescr\(|f:be\.buttons\.csh|f:be\.labels\.csh|BackendUtility::(cshItem|wrapInHelp)\(	CSH removed: delete calls, use TCA description
+v12-globals-registrations	12	breaking	php	\['(toolbarItems|ContextMenu|linkvalidator|elementBrowsers)'\]|\['reports'\]\['tx_reports'\]|\['FE'\]\['ContentObjects'\]	Register via autoconfiguration/service tags instead of $GLOBALS
+v12-upgrade-wizard-globals	12	deprecated	php	\['ext/install'\]\['update'\]	Use #[UpgradeWizard('id')] attribute
+v12-tca-eval-int-double2	12	deprecated	php,xml	'eval'[[:space:]]*=>[[:space:]]*'[^']*(int|double2)	Use 'type' => 'number' (format decimal for double2)
+v12-tca-inputdatetime	12	deprecated	php,xml	inputDateTime	Use 'type' => 'datetime' with 'format'
+v12-tca-inputlink	12	deprecated	php,xml	inputLink	Use 'type' => 'link' with allowedTypes
+v12-tca-email-password-color	12	deprecated	php,xml	'eval'[[:space:]]*=>[[:space:]]*'[^']*(email|password|saltedPassword)|colorpicker	Use 'type' => 'email' / 'password' / 'color'
+v12-tca-file-field	12	deprecated	php	getFileFieldTCAConfig\(	Use 'type' => 'file' with 'allowed'
+v12-tca-eval-required-null	12	deprecated	php,xml	'eval'[[:space:]]*=>[[:space:]]*'[^']*(required|null)	Use 'required' => true / 'nullable' => true
+v12-tca-internal-type	12	deprecated	php,xml	'internal_type'[[:space:]]*=>	Use 'type' => 'folder'; drop internal_type db
+v12-tca-items-indexed	12	deprecated	php	\[[[:space:]]*'LLL:EXT:[^']*'[[:space:]]*,	Use associative items: ['label' => ..., 'value' => ...]
+v12-allow-table-standard-pages	12	deprecated	php	allowTableOnStandardPages\(	Set ctrl.security.ignorePageTypeRestriction = true
+v12-pages-types	12	removed	php	PAGES_TYPES	Use PageDoktypeRegistry
+v12-flexform-tceforms	12	deprecated	xml	<TCEforms	Remove <TCEforms> wrapper in FlexForms
+v12-switchable-controller-actions	12	removed	php,xml	switchableControllerActions	Split into separate plugins; migrate tt_content records
+v12-validator-interface	12	breaking	php	extends AbstractValidator|implements ValidatorInterface	Adapt to new ValidatorInterface: setOptions(), no options constructor
+v12-register-typeconverter	12	deprecated	php	registerTypeConverter\(	Tag type converters with extbase.type_converter in Services.yaml
+v12-querysettings-language	12	breaking	php	->(setLanguageUid|getLanguageUid|setLanguageOverlayMode|getLanguageOverlayMode|setLanguageMode|getLanguageMode)\(	Use QuerySettings->setLanguageAspect(new LanguageAspect(...))
+v12-magic-findby	12	deprecated	php	->(findBy|findOneBy|countBy)([A-TV-Z]|U[a-hj-z]|Ui[a-ce-z]|Uid[A-Za-z])[A-Za-z0-9]*\(	Use findBy(['prop' => $v]) / findOneBy() / count()
+v12-configurationmanager-getcontentobject	12	deprecated	php	->getContentObject\(\)	Use $request->getAttribute('currentContentObject')
+v12-generalutility-gp	12	deprecated	php	GeneralUtility::_(GP|GET|POST|GPmerged)\(	Use $request->getQueryParams() / getParsedBody()
+v12-tsfe-context	12	deprecated	php	TSFE'\]->(sys_language_uid|sys_language_content|fe_user|gr_list|beUserLogin|showHiddenRecords|loginUser|getRequestedId|type)([^a-zA-Z_]|$)|TSFE'\]->(initUserGroups|isUserOrGroupSet|isBackendUserLoggedIn|doWorkspacePreview)\(	Use Context aspects / request attributes (frontend.user, routing)
+v12-template-service	12	deprecated	php	TSFE'\]->tmpl|TemplateService	Use $request->getAttribute('frontend.typoscript')
+v12-check-enable-fields	12	deprecated	php	checkEnableFields\(|hook_checkEnableFields	Use RecordAccessVoter->accessGranted()
+v12-flashmessage-severity	12	deprecated	php	(FlashMessage|AbstractMessage)::(NOTICE|INFO|OK|WARNING|ERROR)	Use ContextualFeedbackSeverity enum
+v12-abstract-plugin	12	deprecated	php	extends[[:space:]]+(\\?TYPO3\\CMS\\Frontend\\Plugin\\)?AbstractPlugin	AbstractPlugin internal/deprecated: port to Extbase or plain USER class
+v12-removed-hooks	12	removed	php	contentPostProc-(all|cached)|insertPageIncache|usePageCache|tt_content_drawItem|record_is_used|drawHeaderHook|drawFooterHook|typoLink_PostProc|typolinkProcessing|getButtonsHook|headerNoCache|get_cache_timeout|cms/layout/db_new_content_el\.php	Hook removed: replace with the PSR-14 event named in its Breaking changelog
+v12-requirejs	12	deprecated	php,html,js	loadRequireJsModule\(|requireJsModules|includeRequireJsModules|JavaScriptModuleInstruction::forRequireJS|addRequireJsConfiguration|^define\(\[	Port to ES modules: Configuration/JavaScriptModules.php + loadJavaScriptModule()
+v12-global-jquery	12	removed	js,html	window\.(\$|jQuery)|TYPO3\.jQuery|TYPO3/CMS/Core/Contrib/jquery	import $ from 'jquery' in an ES module
+v12-ckeditor4-plugins	12	breaking	yaml	externalPlugins|extraPlugins|CKEDITOR\.	CKEditor 5: port plugins to ES modules (importModules)
+v12-include-typoscript	12	deprecated	typoscript,tsconfig	<INCLUDE_TYPOSCRIPT	Use @import 'EXT:...'
+v12-login-usergroup-conditions	12	deprecated	typoscript,tsconfig	(loginUser|usergroup)\(	Use frontend.user.isLoggedIn / frontend.user.userGroupIds
+v12-config-options-removed	12	removed	typoscript	config\.(disablePageExternalUrl|doctypeSwitch|disableCharsetHeader|metaCharset|xhtmlDoctype|baseURL)|spamProtectEmailAddresses[[:space:]]*=[[:space:]]*ascii	Remove obsolete config.* option (xhtmlDoctype -> doctype)
+v12-dbal-fetch	12	removed	php	->(fetchAll|fetchColumn)\(|->fetch\(\)	DBAL 3: fetchAssociative() / fetchAllAssociative() / fetchOne()
+v12-querybuilder-execute	12	deprecated	php	->execute\(\)	Use executeQuery() (SELECT) / executeStatement() (DML)
+v12-expr-andx-orx	12	deprecated	php	->(andX|orX)\(|new CompositeExpression\(|->addMultiple\(	Use expr()->and() / expr()->or(), CompositeExpression::and()/or()/with()
+v12-recordlist-namespace	12	breaking	php,json,yaml	TYPO3\\CMS\\Recordlist\\|typo3/cms-recordlist	EXT:recordlist merged into backend: rename classes, drop dependency
+v12-clear-cache-on-load	12	deprecated	php	clearCacheOnLoad	Remove clearCacheOnLoad from ext_emconf.php
+v12-tca-cruser-id	12	removed	php,sql	cruser_id	Remove ctrl.cruser_id, its column and all reads/writes; use sys_history
