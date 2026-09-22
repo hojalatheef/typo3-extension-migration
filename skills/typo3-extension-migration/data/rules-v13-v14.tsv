@@ -1,0 +1,90 @@
+id	target	level	ext	regex	hint
+v13-platform-constraints	13	breaking	php	'typo3' *=> *'1[0-2]\.|"typo3/cms-[a-z-]+": *"[^"]*\^1[0-2]\.[0-9]	Require PHP ^8.2 and typo3/cms-core ^13.4; ext_emconf depends typo3 13.4.0-13.4.99
+v13-ext-tables-sql-tca-columns	13	breaking	sql	^ *(tstamp|crdate|deleted|hidden|starttime|endtime|sorting|sys_language_uid|l10n_parent|l10n_diffsource|t3ver_[a-z_]+) +(int|tinyint|smallint|varchar|mediumblob|text)	Drop columns TCA auto-creates (ctrl fields and most column types); datetime becomes BIGINT
+v13-tca-mm-hasuidfield	14	deprecated	php	MM_hasUidField	Remove MM_hasUidField; MM tables are auto-managed
+v13-plugin-list-type	14	deprecated	php	list_type|subtype_value_field|subtypes_addlist|subtypes_excludelist|PLUGIN_TYPE_PLUGIN	Register plugins as own CType (PLUGIN_TYPE_CONTENT_ELEMENT) and ship AbstractListTypeToCTypeUpdate wizard
+v13-typoscript-list-type	14	deprecated	typoscript,tsconfig	tt_content\.list\.20\.|list_type *=|CType *= *list|\.list_type	Point rendering/wizard/TCEFORM config to tt_content.<ctype> instead of list/list_type
+v13-ncew-show	13	breaking	tsconfig	wizardItems\.[A-Za-z_]+\.show	Use mod.wizards.newContentElement.wizardItems.<group>.removeItems; items auto-register from TCA
+v13-allowtableonstandardpages	13	removed	php	allowTableOnStandardPages\(	Set ctrl.security.ignorePageTypeRestriction = true in TCA
+v13-getfilefieldtcaconfig	13	removed	php	getFileFieldTCAConfig\(	Use TCA 'type' => 'file' with 'allowed'
+v13-tsfe-global	14	deprecated	php	\$GLOBALS\[.TSFE.]|getTypoScriptFrontendController\(|frontend\.controller	Use request attributes frontend.page.information / frontend.typoscript / language / routing
+v13-tsfe-fe-user	13	removed	php	->fe_user(->|;| *\))	Use $request->getAttribute('frontend.user') or Context aspect frontend.user
+v13-tsfe-cache-tags	14	deprecated	php	(TSFE.]|[Tt]sfe|[Ff]rontendController|Controller\(\))->addCacheTags\(|->getPageCacheTags\(	Use frontend.cache.collector->addCacheTags(new CacheTag(...))
+v13-tsfe-hooks	13	removed	php	configArrayPostProc|pageLoadedFromCache|createHashBase|contentPostProc-|tslib_fe-PostProc|hook_eofe|isOutputting	Replace with ModifyTypoScriptConfigEvent / BeforePageCacheIdentifierIsHashedEvent / AfterCacheableContentIsGeneratedEvent / middleware
+v13-cobj-hook-interfaces	13	removed	php	ContentObject(PostInit|GetData|StdWrap|GetImageResource|OneSourceCollection)HookInterface|stdWrap_cacheStore|getImgResource.]|cObjTypeAndClass	Replace ContentObjectRenderer hooks with PSR-14 events (AfterGetDataResolvedEvent, AfterImageResourceResolvedEvent, ...)
+v13-pagerepository-hooks	13	removed	php	PageRepository(Init|GetPage|GetPageOverlay|GetRecordOverlay)HookInterface|->enableFields\(	Use PageRepository events; replace enableFields() with getDefaultConstraints()
+v13-abstractplugin	13	removed	php	Frontend\\Plugin\\AbstractPlugin|extends +AbstractPlugin|pi_getLL\(|pi_linkTP	Rewrite pibase plugin as Extbase plugin or plain USER class with setContentObjectRenderer()
+v13-typoscriptparser-templateservice	13	removed	php	TypoScript\\Parser\\TypoScriptParser|TypoScript\\TemplateService|->tmpl->setup	Use frontend.typoscript request attribute or TypoScriptStringFactory
+v13-generalutility-gp	13	removed	php	GeneralUtility::_(GP|GET|POST|GPmerged)\(	Read $request->getQueryParams() / getParsedBody()
+v13-ts-condition-loginuser	13	removed	typoscript,tsconfig	\[ *(loginUser|usergroup) *\(	Use [frontend.user.isLoggedIn] / [frontend.user.userGroupIds contains N]
+v13-include-typoscript	14	deprecated	typoscript,tsconfig	<INCLUDE_TYPOSCRIPT:	Use @import 'EXT:...'
+v13-add-page-user-tsconfig	14	deprecated	php	ExtensionManagementUtility::add(Page|User)TSConfig\(|defaultPageTSconfig|defaultUserTSconfig	Move to Configuration/page.tsconfig and Configuration/user.tsconfig
+v13-standaloneview	14	deprecated	php	Fluid\\View\\(StandaloneView|TemplateView|AbstractTemplateView)|GenericViewResolver|ViewResolverInterface	Inject ViewFactoryInterface and create(new ViewFactoryData(...))
+v13-viewhelper-renderstatic	14	deprecated	php	function +renderStatic *\(|CompileWithRenderStatic|CompileWithContentArgumentAndRenderStatic	Convert to non-static render() using $this->arguments / renderChildren()
+v13-viewhelper-tagattributes	14	deprecated	php	registerUniversalTagAttributes\(|registerTagAttribute\(	Remove calls; read pass-through attributes from $this->additionalArguments
+v13-renderingcontext-getrequest	14	deprecated	php	renderingContext->getRequest\(|RenderingContext->setRequest\(	Use $renderingContext->getAttribute(ServerRequestInterface::class)
+v13-extbase-strict-types	13	breaking	php	protected +\$(defaultViewObjectName|errorMethodName|actionMethodName|uid|pid|_localizedUid|_languageUid)( *=|;)	Match native property/method types of ActionController, AbstractDomainObject etc.; assign in constructor for dual support
+v13-extbase-annotations	14	deprecated	php	@(Extbase\\)?(Validate|IgnoreValidation|ORM\\(Lazy|Transient|Cascade)|Inject)([( ]|$)|@TYPO3\\CMS\\Extbase\\Annotation	Convert to PHP attributes (#[Validate], #[Lazy], ...) with TYPO3\CMS\Extbase\Annotation namespace for v13
+v13-extbase-hashservice	14	deprecated	php	Extbase\\Security\\Cryptography\\HashService|GeneralUtility::hmac\(	Use TYPO3\CMS\Core\Crypto\HashService with a mandatory additional secret
+v13-configurationmanager-contentobject	13	removed	php	->(getContentObject|setContentObject)\(|->(setLanguageUid|getLanguageUid|setLanguageOverlayMode|getLanguageOverlayMode)\(	Use request attribute currentContentObject; setLanguageAspect() on query settings
+v13-registertypeconverter	13	removed	php	registerTypeConverter\(	Register type converters in Services.yaml with tag extbase.type_converter
+v13-validator-shorthand	14	deprecated	php	TYPO3\.CMS\.Extbase:|'errorMessage' *=>	Use validator FQCN or core alias; rename errorMessage option to message
+v13-querybuilder-dbal4	13	removed	php	->execute\(\)|->add\( *'(select|where|having|orderBy|groupBy)'|->resetQueryParts?\(|->getQueryParts?\(	Use executeQuery()/executeStatement(), direct setters, resetWhere()/resetOrderBy()
+v13-expressionbuilder-dbal4	13	removed	php	expr\(\)->(andX|orX)\(|\\?PDO::PARAM_|->lastInsertId\( *'	Use expr()->and()/or(), Connection::PARAM_* and lastInsertId() without args
+v13-module-registration	13	removed	php	ExtensionManagementUtility::addModule\(|ExtensionUtility::registerModule\(|addNavigationComponent\(|insertModuleFunction\(	Register modules in Configuration/Backend/Modules.php and routes in Routes.php
+v13-moduletemplate-api	13	removed	php	->(setContent|renderContent|getView|registerModuleMenu|getDynamicTabMenu)\(	Use ModuleTemplateFactory->create($request), assign() and renderResponse('Template')
+v13-requirejs	13	removed	php	loadRequireJs(Module)?\(|forRequireJS\(|requireJsModules|RequireJsModuleInterface	Ship ES modules via Configuration/JavaScriptModules.php and loadJavaScriptModule()
+v13-controller-attribute	14	deprecated	php	Backend\\Attribute\\Controller|#\[Controller]	Use Symfony #[AsController]
+v13-icon-api	14	deprecated	php	makeInstance\( *\\?(TYPO3\\CMS\\Core\\Imaging\\)?IconRegistry::class|Icon::SIZE_(SMALL|DEFAULT|MEDIUM|LARGE|MEGA)|Type\\Icon\\IconState	Register icons in Configuration/Icons.php; use IconSize / Imaging\IconState enums
+v13-enumeration	14	deprecated	php	extends +\\?(TYPO3\\CMS\\Core\\Type\\)?Enumeration|Resource\\DuplicationBehavior::|VersionState::cast\(|FILETYPE_(IMAGE|TEXT|AUDIO|VIDEO|APPLICATION|UNKNOWN)	Replace Enumeration subclasses and constant classes with native backed enums
+v13-flashmessage-severity	13	removed	php	(AbstractMessage|FlashMessage)::(OK|INFO|NOTICE|WARNING|ERROR)|FormProtectionFactory::get\(	Use ContextualFeedbackSeverity enum; FormProtectionFactory->createFromRequest()
+v14-platform-constraints	14	breaking	php	'typo3' *=> *'1[0-3]\.[0-9.]+-1[0-3]\.|"typo3/cms-[a-z-]+": *"\^1[0-3]\.[0-9]+"	Require PHP ^8.2 and typo3/cms-core ^14.3 (or ^13.4 || ^14.3)
+v14-composer-json-required	15	deprecated	php	\$EM_CONF\[	composer.json with type typo3-cms-extension and extra.typo3/cms.extension-key is mandatory; add version + providesPackages; ext_emconf.php deprecated
+v14-ext-tables-php	15	deprecated	php	addFieldsToUserSettings\(|TYPO3_USER_SETTINGS.]\[.columns|PageDoktypeRegistry::class\)->add\(	Move ext_tables.php content to Modules.php / Routes.php / TCA Overrides (addUserSetting, allowedRecordTypes)
+v14-tsfe-removed	14	removed	php	\$GLOBALS\[.TSFE.]|getTypoScriptFrontendController\(|frontend\.controller	Use request attributes; frontend.controller and getTypoScriptFrontendController() are gone
+v14-additional-header-data	14	removed	php	additional(Header|Footer)Data	Use PageRenderer->addHeaderData() / addFooterData()
+v14-ts-condition-gettsfe	14	removed	typoscript,tsconfig	getTSFE\(\)	Use request?.getPageArguments()?.getPageId() and other request/page/site variables
+v14-asallowedcallable	14	breaking	typoscript,tsconfig	(userFunc|preUserFunc|postUserFunc|postUserFuncInt|renderFunc) *[=<]	Mark every TypoScript/TSconfig userFunc/renderFunc target with #[AsAllowedCallable]
+v14-include-typoscript	14	removed	typoscript,tsconfig	<INCLUDE_TYPOSCRIPT:	Use @import 'EXT:...'
+v14-superglobals-request	14	breaking	php	\$_(GET|POST)\[|HTTP_(GET|POST)_VARS|\$GLOBALS\[.TYPO3_REQUEST.]	Read the PSR-7 request instead of $_GET/$_POST/$GLOBALS['TYPO3_REQUEST']
+v14-getindpenv	15	deprecated	php	getIndpEnv\(	Use $request->getAttribute('normalizedParams') getters
+v14-asset-concat-compress	14	removed	php,typoscript	(concatenate|compress)(Css|Js) *=|(css|js)(Concatenate|Compress)Handler|minifyJavaScript|(enable|disable|get)(Concatenate|Compress)(Css|Javascript)\(|excludeFromConcatenation|disableCompression	Remove concatenate/compress options, handlers and PageRenderer methods; bundle at build time
+v14-system-resource-urls	14	breaking	php,typoscript,html	getPublicResourceWebPath\(|createVersionNumberedFilename\(|FilePathSanitizer|typo3conf/ext/	Reference EXT:/PKG:/FAL:/URI: resources; drop typo3conf/ext paths and deprecated helpers
+v14-arbitrary-extension-resources	15	deprecated	php,typoscript,html,yaml	EXT:[a-z0-9_]+/(Documentation|Build|Classes|dist|node_modules|Assets)/	Keep resources in Configuration/, Resources/Private/, Resources/Public/ or declare them in Configuration/Resources.php
+v14-list-type-removed	14	removed	php,typoscript,tsconfig	list_type|subtype_value_field|subtypes_(addlist|excludelist)|PLUGIN_TYPE_PLUGIN|tt_content\.list\.20	tt_content.list_type and TCA subtypes are gone: register CType plugins and run AbstractListTypeToCTypeUpdate wizard
+v14-flexform-ds-pointer	14	breaking	php	ds_pointerField|addPiFlexFormValue\(|'ds' *=> *\[	Assign single ds per CType via columnsOverrides or registerPlugin()/addPlugin() FlexForm argument
+v14-tca-searchfields	14	removed	php	'searchFields' *=>|'search' *=> *\[	Remove ctrl.searchFields and column search options; use 'searchable' => false to opt out
+v14-tca-isstatic-maxdblistitems-evalyear	14	removed	php	'is_static' *=>|'max(Single)?DBListItems' *=>|'eval' *=> *'[^']*year	Remove is_static / maxDBListItems / eval=year; use TSconfig list limits and type=number range
+v14-tca-valuepicker-mode	14	removed	php	'mode' *=> *'(prepend|append)'	Drop valuePicker mode prepend/append
+v14-backend-layout-provider	14	removed	php	\[.BackendLayoutDataProvider.]	Implement DataProviderInterface::getIdentifier(); autoconfigure or tag page_layout.data_provider
+v14-extbase-annotations-removed	14	removed	php	@(Extbase\\)?(Validate|IgnoreValidation|ORM\\(Lazy|Transient|Cascade)|FileUpload)([( ]|$)|@TYPO3\\CMS\\Extbase\\Annotation	Convert doc-comment annotations to PHP attributes
+v14-extbase-attribute-namespace-array	15	deprecated	php	Extbase\\Annotation(\\| as )|#\[[A-Za-z\\]*(Validate|FileUpload|IgnoreValidation|Cascade)\( *\[	Use TYPO3\CMS\Extbase\Attribute namespace and named arguments instead of arrays
+v14-extbase-method-level-validation	15	deprecated	php	IgnoreValidation\(.*argumentName|Validate\(.*(param:|'param' *=>)	Place #[Validate]/#[IgnoreValidation] directly on action parameters
+v14-extbase-validator-request	14	breaking	php	implements +[A-Za-z\\, ]*ValidatorInterface	Extend AbstractValidator or implement setRequest()/getRequest()
+v14-extbase-argument-strict	14	breaking	php	implements +[A-Za-z\\, ]*PropertyMappingConfigurationInterface|extends +[A-Za-z\\]*Mvc\\Controller\\Argument( |$)	Match strict types of Extbase Argument and PropertyMappingConfigurationInterface
+v14-extbase-module-global-ts	14	breaking	typoscript	module\.tx_[a-z0-9_]+	Register module.tx_* config via addTypoScriptSetup() in ext_localconf.php for modules without page tree
+v14-extbase-hashservice-removed	14	removed	php	Extbase\\Security\\Cryptography\\HashService|GeneralUtility::hmac\(	Use TYPO3\CMS\Core\Crypto\HashService
+v14-hmac-sha3	14	breaking	php	->(hmac|appendHmac|validateHmac|validateAndStripHmac)\(	HMACs are SHA3-256 (64 chars): widen columns, pass HashAlgo explicitly for persisted hashes
+v14-fluid-standaloneview-removed	14	removed	php	Fluid\\View\\(StandaloneView|TemplateView|AbstractTemplateView)|GenericViewResolver|ViewResolverInterface|Core\\View\\FluidView(Adapter|Factory)	Use ViewFactoryInterface->create(new ViewFactoryData(...))
+v14-fluid-renderstatic-removed	14	removed	php	function +renderStatic *\(|CompileWithRenderStatic|CompileWithContentArgumentAndRenderStatic	Convert renderStatic() to render(); it is silently never called in Fluid 5
+v14-fluid-tagattributes-removed	14	removed	php	registerUniversalTagAttributes\(|registerTagAttribute\(	Remove registerTagAttribute()/registerUniversalTagAttributes(); use additionalArguments or registerArgument()
+v14-fluid-strict-viewhelpers	14	breaking	php	function +(initializeArguments|render) *\( *\) *(\{|$)	Declare initializeArguments(): void and a render() return type; no defaults on required args
+v14-fluid-underscore-cdata	14	breaking	html	(as|name|key|iteration)="_[A-Za-z]|<!\[CDATA\[	Rename _-prefixed Fluid variables; remove CDATA sections (no longer stripped)
+v14-renderingcontext-getrequest-removed	14	removed	php	renderingContext->(getRequest|setRequest)\(	Use $renderingContext->getAttribute(ServerRequestInterface::class)
+v14-fluid-namespaces-conf-vars	15	deprecated	php	\[.fluid.]\[.namespaces.]	Register global namespaces in Configuration/Fluid/Namespaces.php
+v14-removed-utility-methods	14	removed	php	ExtensionManagementUtility::(addPageTSConfig|addUserTSConfig|addPItoST43|getExtensionIcon)\(|MathUtility::convertToPositiveInteger\(|BackendUtility::(thumbCode|getTcaFieldConfiguration)\(	Use page.tsconfig/user.tsconfig files, max(0, (int)$x), configurePlugin(), Icon API
+v14-enumeration-icon-constants-removed	14	removed	php	Core\\Type\\Enumeration|Type\\Icon\\IconState|Resource\\DuplicationBehavior|Icon::SIZE_[A-Z]+|AbstractFile::FILETYPE_	Use native enums IconSize, Imaging\IconState, Resource\Enum\DuplicationBehavior, Resource\FileType
+v14-hook-interfaces-enablefields-removed	14	removed	php	(ContentObject(PostInit|GetData|StdWrap|GetImageResource|OneSourceCollection)|PageRepository(Init|GetPage))HookInterface|->enableFields\(	Replace hook interfaces with PSR-14 events; enableFields() with getDefaultConstraints()
+v14-mailmessage-send	14	removed	php	(MailMessage|FluidEmail).*->send\(\)|\$(mail|message|email)->send\(\)	Inject MailerInterface and call $mailer->send($message)
+v14-psr14-events-changed	14	breaking	php	AfterMailerInitializationEvent|AfterCacheableContentIsGeneratedEvent|AfterCachedPageIsPersistedEvent|ModifyPageLayoutOnLoginProviderSelectionEvent	AfterMailerInitializationEvent removed; AfterCacheableContentIsGeneratedEvent uses getContent()/setContent(); no TSFE in cache events
+v14-typolink-builder	14	breaking	php	extends +[A-Za-z\\]*AbstractTypolinkBuilder|function +build\( *array *&	Implement TypolinkBuilderInterface with DI and buildLink($linkDetails, $configuration, $request, $linkText)
+v14-flexformservice	14	breaking	php	Core\\Service\\FlexFormService|FlexFormService::class	Inject FlexFormTools and call convertFlexFormContentToArray($xml) (one argument)
+v14-cache-backend-strict	14	breaking	php	(extends|implements) +[A-Za-z\\]*(AbstractBackend|BackendInterface|TaggableBackendInterface|FrontendInterface|FreezableBackendInterface)	Match strict cache backend/frontend interface signatures; FreezableBackendInterface removed
+v14-upgrade-wizard-namespace	15	deprecated	php	Install\\Updates\\(UpgradeWizardInterface|RepeatableInterface|ChattyInterface|ConfirmableInterface|AbstractListTypeToCTypeUpdate)|Install\\Attribute\\UpgradeWizard	Use TYPO3\CMS\Core\Upgrades\* and TYPO3\CMS\Core\Attribute\UpgradeWizard
+v14-scheduler-sc-options	15	deprecated	php	\[.scheduler.]\[.tasks.]|AdditionalFieldProviderInterface	Register native TCA-based scheduler tasks instead of SC_OPTIONS + AdditionalFieldProvider
+v14-reports-interface	14	removed	php	Reports\\(RequestAware)?ReportInterface|implements +[A-Za-z\\, ]*(RequestAware)?ReportInterface|\[.reports.]\[.tx_reports.]	Register reports as backend submodules of system_reports in Modules.php
+v14-metadata-extractor-registration	14	removed	php	registerExtractionService\(	Remove registerExtractionService(); ExtractorInterface classes are autoconfigured
+v14-buttonbar-make	15	deprecated	php	->make(Button|LinkButton|InputButton|SplitButton|DropDownButton|FullyRenderedButton|ShortcutButton|MenuItem|Menu)\(	Inject ComponentFactory and use create*() methods
+v14-backend-modal-dialog	14	breaking	js	(show|shown|hide|hidden)\.bs\.modal|bootstrap.*Modal|new +Modal\(	Use @typo3/backend/modal API and typo3-modal-* events on the returned instance
+v14-localization-internals	14	breaking	php	\[.lang.]\[.(parser|format|requireApprovedLocalizations).]|locallangXMLOverride|->getParsedData\(	Move lang config to TYPO3_CONF_VARS[LANG]; locallangXMLOverride -> LANG.resourceOverrides; getParsedData(file, lang)
+v14-datahandler-environment-leftovers	14	removed	php	->(storeLogMessages|copyWhichTables|neverHideAtCopy|copyTree)[^A-Za-z_]|getComposerRootPath\(	Drop removed DataHandler copy/log properties; Environment::getProjectPath()
