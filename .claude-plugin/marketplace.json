@@ -1,0 +1,21 @@
+{
+  "name": "typo3-extension-migration",
+  "owner": {
+    "name": "Hoja Mustaffa Abdul Latheef",
+    "email": "hlatheef@jweiland.net",
+    "url": "https://jweiland.net"
+  },
+  "description": "Marketplace for TYPO3 extension migration plugins across LTS lines v10 to v14.",
+  "plugins": [
+    {
+      "name": "typo3-extension-migration",
+      "source": "./",
+      "description": "Migrate TYPO3 extensions across LTS lines (v10 to v14) with planning, automation and verification agents.",
+      "author": {
+        "name": "Hoja Mustaffa Abdul Latheef",
+        "email": "hlatheef@jweiland.net",
+        "url": "https://jweiland.net"
+      }
+    }
+  ]
+}
