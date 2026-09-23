@@ -1,0 +1,100 @@
+# .github/workflows/ci.yml - CI for a TYPO3 extension across PHP x TYPO3.
+# Assumes composer.json: config.vendor-dir ".Build/vendor", config.bin-dir ".Build/bin",
+# extra.typo3/cms.web-dir ".Build/public", and templates from this folder at:
+#   rector.php, fractor.php, phpstan.neon, .php-cs-fixer.dist.php, Build/phpunit/{Unit,Functional}Tests.xml
+# Placeholders (example values for dual 13.4 + 14.3):
+#   __LOW_CORE__   ^13.4    __HIGH_CORE__  ^14.3
+#   __LOW_PHP__    8.2      __HIGH_PHP__   8.5
+#   __TF__         ^9       (testing-framework major covering both lines)
+# Keep matrix values identical to the constraints in composer.json / ext_emconf.php.
+# composer.lock must not be committed for an extension.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: CS, Rector, Fractor (PHP __HIGH_PHP__)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '__HIGH_PHP__'
+          coverage: none
+          tools: composer:v2
+      - name: Install (lowest supported core, the Rector/Fractor level)
+        run: |
+          composer require --no-update --no-interaction "typo3/cms-core:__LOW_CORE__"
+          composer update --no-interaction --no-progress
+      - name: PHP lint
+        run: find . -name '*.php' -not -path './.Build/*' -print0 | xargs -0 -n1 -P4 php -l > /dev/null
+      - name: php-cs-fixer
+        run: .Build/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.dist.php
+      - name: Rector (must report no changes)
+        run: .Build/bin/rector process --dry-run --no-progress-bar
+      - name: Fractor (must report no changes)
+        run: .Build/bin/fractor process --dry-run
+
+  test:
+    name: TYPO3 ${{ matrix.typo3 }} / PHP ${{ matrix.php }} ${{ matrix.composer-flags }}
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { typo3: '__LOW_CORE__',  php: '__LOW_PHP__',  composer-flags: '--prefer-lowest' }
+          - { typo3: '__LOW_CORE__',  php: '__HIGH_PHP__', composer-flags: '' }
+          - { typo3: '__HIGH_CORE__', php: '__LOW_PHP__',  composer-flags: '' }
+          - { typo3: '__HIGH_CORE__', php: '__HIGH_PHP__', composer-flags: '' }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: intl, mbstring, pdo_sqlite, sqlite3, zip
+          coverage: none
+          tools: composer:v2
+      - name: Require core ${{ matrix.typo3 }}
+        # Add every typo3/cms-* package your composer.json requires to this line.
+        run: |
+          composer require --no-update --no-interaction \
+            "typo3/cms-core:${{ matrix.typo3 }}" \
+            "typo3/cms-extbase:${{ matrix.typo3 }}" \
+            "typo3/cms-fluid:${{ matrix.typo3 }}" \
+            "typo3/cms-frontend:${{ matrix.typo3 }}"
+          composer require --dev --no-update --no-interaction "typo3/testing-framework:__TF__"
+          composer update --no-interaction --no-progress ${{ matrix.composer-flags }}
+      - name: Show resolved core
+        run: composer show typo3/cms-core | head -n 4
+      - name: PHPStan
+        # One baseline per core line if they differ: pass -c phpstan-v13.neon / phpstan-v14.neon.
+        run: .Build/bin/phpstan analyse --no-progress --memory-limit=1G
+      - name: Unit tests
+        run: .Build/bin/phpunit -c Build/phpunit/UnitTests.xml
+      - name: Functional tests (SQLite)
+        env:
+          typo3DatabaseDriver: pdo_sqlite
+        run: .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml
+
+  # Optional early warning against the next core; never blocks merges.
+  # next:
+  #   runs-on: ubuntu-latest
+  #   continue-on-error: true
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: shivammathur/setup-php@v2
+  #       with: { php-version: '__HIGH_PHP__', extensions: 'intl, pdo_sqlite', coverage: none }
+  #     - run: |
+  #         composer config minimum-stability dev
+  #         composer require --no-update "typo3/cms-core:dev-main"
+  #         composer update --no-interaction --no-progress
+  #         .Build/bin/phpunit -c Build/phpunit/UnitTests.xml

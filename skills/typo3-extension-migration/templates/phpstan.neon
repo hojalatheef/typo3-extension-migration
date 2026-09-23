@@ -1,0 +1,29 @@
+# phpstan.neon - static analysis for a TYPO3 extension.
+# Requires: phpstan/phpstan, saschaegerer/phpstan-typo3
+#   core 12 (PHPStan 1): ^1.10 | core 13: ^2.2 | core 14: ^3.1 | 13+14: "^2.2 || ^3.1"
+# Placeholders:
+#   __LEVEL__  keep the current level during an upgrade; raise it in a separate step
+# Baseline: vendor/bin/phpstan analyse --generate-baseline
+#   (regenerate after each migration step, not once at the end; one baseline per core line if they differ)
+
+includes:
+    # Drop this include if phpstan/extension-installer is installed.
+    - .Build/vendor/saschaegerer/phpstan-typo3/extension.neon
+    # - phpstan-baseline.neon
+
+parameters:
+    level: __LEVEL__
+    paths:
+        - Classes
+        - Configuration
+        - Tests
+    excludePaths:
+        - .Build
+        - vendor
+        - var
+        - Tests/*/Fixtures/*
+    tmpDir: .Build/.cache/phpstan
+    reportUnmatchedIgnoredErrors: true
+    # typo3:
+    #     requestGetAttributeMapping:
+    #         myAttribute: Vendor\MyExt\Http\MyAttribute
