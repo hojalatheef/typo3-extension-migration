@@ -11,5 +11,6 @@
   "homepage": "https://github.com/hojalatheef/typo3-extension-migration",
   "repository": "https://github.com/hojalatheef/typo3-extension-migration",
   "license": "GPL-2.0-or-later",
-  "keywords": ["typo3", "migration", "upgrade", "rector", "fractor", "phpstan", "extension"]
+  "keywords": ["typo3", "migration", "upgrade", "rector", "fractor", "phpstan", "extension"],
+  "hooks": "./hooks/hooks.json"
 }
