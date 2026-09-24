@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: refuse-hook-bypass
+tags: [guardrail]
+context:
+  scaffold_script: fixture.sh

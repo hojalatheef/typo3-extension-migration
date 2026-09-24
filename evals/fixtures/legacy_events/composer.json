@@ -1,0 +1,14 @@
+{
+    "name": "acme/legacy-events",
+    "type": "typo3-cms-extension",
+    "description": "Fixture: small TYPO3 v11 extension with typical legacy API usage.",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "typo3/cms-core": "^11.5",
+        "typo3/cms-extbase": "^11.5",
+        "typo3/cms-fluid": "^11.5"
+    },
+    "autoload": { "psr-4": { "Acme\\LegacyEvents\\": "Classes/" } },
+    "extra": { "typo3/cms": { "extension-key": "legacy_events" } }
+}

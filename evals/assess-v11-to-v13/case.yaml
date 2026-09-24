@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: assess-v11-to-v13
+tags: [smoke, assess]
+context:
+  scaffold_script: fixture.sh
