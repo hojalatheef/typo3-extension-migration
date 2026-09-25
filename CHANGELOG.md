@@ -10,8 +10,12 @@ All notable changes to this project are documented here. The format follows
 
 - `scripts/changelog-lookup.sh`: prints the official TYPO3 core changelog entry for a changelog id, issue number or keyword, from the vendor core or a cached sparse clone of `TYPO3/typo3`. The main skill, `code-migrator` and `migration-reviewer` use it instead of guessing.
 - README: workflow flowchart, agent roles and how the agents communicate.
-- GitHub CI workflow with a status badge in the README.
+- GitHub CI workflow (`npm test` and `claude plugin validate --strict`) with a status badge in the README.
 - `package.json` (private) with `npm test`, lint and `release:check` scripts; the self-test checks that its version matches `plugin.json`.
+
+### Changed
+
+- License is now MIT (was GPL-2.0-or-later).
 
 ## [0.1.0] - 2026-09-24
 

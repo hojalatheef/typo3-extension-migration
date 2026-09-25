@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/hojalatheef/typo3-extension-migration.git"
   },
-  "license": "GPL-2.0-or-later",
+  "license": "MIT",
   "author": "Hoja Mustaffa Abdul Latheef <hlatheef@jweiland.net>",
   "engines": {
     "node": ">=20"
