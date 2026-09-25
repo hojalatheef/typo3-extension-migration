@@ -1,5 +1,7 @@
 # typo3-extension-migration
 
+[![CI](https://github.com/hojalatheef/typo3-extension-migration/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/hojalatheef/typo3-extension-migration/actions/workflows/ci.yml)
+
 A Claude Code plugin that moves TYPO3 extensions from one LTS line to the next,
 anywhere from **v10 to v14**, and proves the result on every line it claims to support.
 
