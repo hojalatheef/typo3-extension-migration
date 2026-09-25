@@ -90,4 +90,7 @@ composer dump-autoload
 | --- | --- | --- |
 | SQL errors on new columns | Schema not updated | `vendor/bin/typo3 extension:setup` or Install Tool > Analyze Database Structure |
 | `ext_tables.sql` parse error | Old syntax (e.g. explicit TCA-managed columns that core now auto-creates, `KEY` lengths) | Remove core-managed columns (v13 auto-creates many from TCA ctrl) and fix syntax |
+| Schema compare prints no SQL right after `ext_tables.sql` was slimmed down | The compare command failed (for example a `'*'` argument mangled by `ddev exec`) and printed only its usage | Check the exit code; pass explicit types such as `safe,destructive` |
+| `Duplicate entry` on a `*_mm` table, import rolls back | The MM table was removed from `ext_tables.sql`; the auto-created one has the primary key `(uid_local, uid_foreign)` instead of `uid` | Keep the MM table's `CREATE TABLE` with its `uid` primary key, or de-duplicate the pairs before inserting |
+| `Unknown column 'cruser_id'` on insert | Column dropped, but import or repository code still writes it | Remove the write from the row array or raw `INSERT` |
 | Content missing after plugin migration | Upgrade wizard not run | `vendor/bin/typo3 upgrade:list` / `upgrade:run` |
