@@ -16,7 +16,7 @@ Check, in this order:
 1. **Silenced checks** — new `@phpstan-ignore`, baseline growth, `markTestSkipped`, deleted or emptied tests, `--no-verify` in history (`git log --format=%B <base>..HEAD`), lowered PHPStan level, rules skipped in rector.php without a reason.
 2. **Constraint honesty** — composer.json and ext_emconf.php agree; every declared line actually appears in the gate output as PASSED; no non-existent minors; PHP floor matches the lowest TYPO3 line.
 3. **Dual-version correctness** — for each API switched to the new line, is the older declared line still served (feature detection, not version string guessing)?
-4. **Behaviour drift** — changed return types, null handling, default values, query semantics (Extbase `QueryInterface`, `respectStoragePage`), TypoScript keys read, cache tags, signal→event payload differences, middleware order.
+4. **Behaviour drift** — changed return types, null handling, default values, query semantics (Extbase `QueryInterface`, `respectStoragePage`), TypoScript keys read, cache tags, signal→event payload differences, middleware order. When a replacement looks doubtful, check it against the official text: `${CLAUDE_PLUGIN_ROOT}/skills/typo3-extension-migration/scripts/changelog-lookup.sh <Changelog-ID or keyword>`.
 5. **Public surface** — renamed/removed classes, methods, hooks, events, TypoScript or TSconfig options that other extensions or integrators rely on; each must be listed as breaking for the changelog.
 6. **Leftovers** — rerun `${CLAUDE_PLUGIN_ROOT}/skills/typo3-extension-migration/scripts/scan-legacy-api.sh --from <src> --to <dst>`; any remaining hit must be in the ledger as deferred with a reason.
 

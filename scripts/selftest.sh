@@ -66,6 +66,22 @@ out="$("$skill/scripts/scan-legacy-api.sh" --from 11 --to 12 --path evals/fixtur
 hits="$(jq '.matched_rules' <<<"$out")"
 (( hits >= 5 )) && ok "fixture v11→v12 matched $hits rules" || bad "fixture v11→v12 matched only $hits rules"
 
+echo "changelog lookup"
+lookup="$skill/scripts/changelog-lookup.sh"
+"$lookup" >/dev/null 2>&1; [[ $? -eq 2 ]] && ok "no query exits 2" || bad "no query should exit 2"
+tmp="$(mktemp -d)"
+cl="$tmp/.Build/vendor/typo3/cms-core/Documentation/Changelog/12.0"
+mkdir -p "$cl"
+printf 'Breaking: #98443 - Extension recordlist merged into backend\n\nrecordlist text\n' > "$cl/Breaking-98443-ExtensionRecordlistMergedIntoBackend.rst"
+printf 'Index\n' > "$cl/Index.rst"
+XDG_CACHE_HOME="$tmp/cache" "$lookup" 98443 --path "$tmp" --no-fetch | grep -q 'recordlist text' \
+  && ok "finds an issue number in the vendor copy" || bad "issue number lookup failed"
+XDG_CACHE_HOME="$tmp/cache" "$lookup" recordlist --path "$tmp" --no-fetch --list | grep -q 'Breaking-98443' \
+  && ok "keyword search lists the entry" || bad "keyword search failed"
+XDG_CACHE_HOME="$tmp/cache" "$lookup" 11111 --path "$tmp" --no-fetch >/dev/null 2>&1; [[ $? -eq 1 ]] \
+  && ok "unknown id exits 1" || bad "unknown id should exit 1"
+rm -rf "$tmp"
+
 echo "guard hook"
 probe() {
   local out

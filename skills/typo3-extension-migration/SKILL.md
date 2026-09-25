@@ -89,6 +89,12 @@ Card-specific guidance:
 - `references/multi-version-support.md`: when two lines must run from one codebase
 - `references/troubleshooting.md`: when an error message doesn't point to a card
 
+When a card's hint isn't enough (a class mapping, a list of removed hooks, the
+exact replacement), run `scripts/changelog-lookup.sh <Changelog-ID>` (or an
+issue number or keyword) and use the official changelog text instead of
+guessing. It reads the vendor core first and falls back to a cached copy of
+every core version's changelogs.
+
 ## Phase 5: Prove
 
 Follow the `verify` skill. The migration is done only when all of these hold:
