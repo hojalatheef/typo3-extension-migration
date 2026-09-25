@@ -5,3 +5,4 @@ evals/results/
 evals/**/vendor/
 evals/**/composer.lock
 .migration/
+node_modules/

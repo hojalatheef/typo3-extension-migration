@@ -16,6 +16,8 @@ for j in .claude-plugin/plugin.json .claude-plugin/marketplace.json hooks/hooks.
 done
 v_plugin="$(jq -r .version .claude-plugin/plugin.json)"
 grep -q "## \[$v_plugin\]" CHANGELOG.md && ok "CHANGELOG has $v_plugin" || bad "CHANGELOG lacks entry for $v_plugin"
+v_package="$(jq -r .version package.json)"
+[[ "$v_package" == "$v_plugin" ]] && ok "package.json version matches plugin.json" || bad "package.json version $v_package != plugin.json $v_plugin"
 
 echo "frontmatter"
 for f in skills/*/SKILL.md agents/*.md; do

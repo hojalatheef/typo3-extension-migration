@@ -6,5 +6,5 @@
 - Every card with a greppable pattern gets a matching row in `data/rules-*.tsv`.
 - Scripts must work with the bash 3.2 that ships with macOS and with GNU/BSD
   userlands (no `mapfile`, no `grep -P`, no `sed -i` without a suffix).
-- Run `scripts/selftest.sh` before opening a pull request.
+- Run `npm test` (self-test and Markdown lint) before opening a pull request.
 - Commit messages follow the TYPO3 style: `[FEATURE]`, `[BUGFIX]`, `[TASK]`, `[DOCS]`.

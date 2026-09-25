@@ -350,11 +350,29 @@ a git hook, run the command yourself (for example `! git commit --no-verify
 
 ## Develop
 
+The checks run through npm (Node 20 or later; `nvm use` picks the version in
+`.nvmrc`). `package.json` is private and only runs checks; nothing is
+published to npm.
+
 ```bash
-scripts/selftest.sh                 # manifests, frontmatter, rule syntax, scanner fixture, changelog lookup, hook behaviour
-claude plugin validate .            # Claude Code's own manifest validation
-claude plugin eval . --runs 1       # behavioural evals in evals/
+npm install                         # once: installs markdownlint-cli2
+npm test                            # self-test + Markdown lint (what CI runs)
+npm run release:check               # npm test + claude plugin validate --strict, before tagging a release
 ```
+
+| Script | Runs |
+| --- | --- |
+| `npm run test:self` | `scripts/selftest.sh`: manifests, versions, frontmatter, rule syntax, scanner fixture, changelog lookup, shellcheck, hook behaviour |
+| `npm run lint:md` / `lint:md:fix` | markdownlint on every Markdown file, or fix what it can |
+| `npm run lint:sh` | shellcheck on all scripts |
+| `npm run validate` | `claude plugin validate --strict .` |
+
+The self-test needs `jq`; shellcheck is used when installed. Behavioural
+evals run separately with `claude plugin eval . --runs 1`.
+
+A release bumps `version` in `.claude-plugin/plugin.json` and `package.json`
+together (the self-test fails if they differ), adds the `CHANGELOG.md`
+section, passes `npm run release:check`, and is tagged `vX.Y.Z`.
 
 Evals in `evals/`:
 
