@@ -1,4 +1,4 @@
-# typo3-extension-migration
+# TYPO3 Extension Migration
 
 [![CI](https://github.com/hojalatheef/typo3-extension-migration/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/hojalatheef/typo3-extension-migration/actions/workflows/ci.yml)
 
