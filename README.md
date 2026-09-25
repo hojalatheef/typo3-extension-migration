@@ -394,4 +394,4 @@ Maintained by **Hoja Mustaffa Abdul Latheef** ([jweiland.net](https://jweiland.n
 
 ## License
 
-GPL-2.0-or-later. See [LICENSE](LICENSE).
+MIT License - See [LICENSE](LICENSE).
