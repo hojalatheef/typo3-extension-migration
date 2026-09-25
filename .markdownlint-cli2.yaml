@@ -5,3 +5,5 @@ config:
     siblings_only: true
   MD033: false
   MD041: false        # SKILL.md files start with frontmatter
+  MD060:
+    style: compact    # tables as "| a | b |" with "| --- | --- |" separators

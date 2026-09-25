@@ -22,7 +22,7 @@ Keep progress in the extension under `.migration/` (add it to `.gitignore`
 unless the user wants it committed):
 
 | File | Holds |
-|---|---|
+| --- | --- |
 | `.migration/inventory.json` | output of `scripts/inventory.sh --json` |
 | `.migration/scan-vNN.md` | rule scan per hop |
 | `.migration/plan.md` | hops, work packages, owners, risks |
@@ -119,7 +119,7 @@ Give the user:
 ## Model and agent usage
 
 | Agent | Model | Used for |
-|---|---|---|
+| --- | --- | --- |
 | `legacy-scout` | haiku | fast, read-only occurrence hunts per area |
 | `migration-strategist` | opus | plan, hop sequencing, risk calls |
 | `code-migrator` | sonnet | edits within one disjoint file set, self-checked |

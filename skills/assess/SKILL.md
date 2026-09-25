@@ -38,7 +38,7 @@ path, if given, is the extension directory (default: current directory).
 5. Rate the effort:
 
 | Rating | Typical signal |
-|---|---|
+| --- | --- |
 | S | one hop, fewer than 20 hits, Rector covers most of them, tests exist |
 | M | one or two hops, 20–80 hits, some TCA/Fluid/JS work |
 | L | three or more hops, a backend module or XCLASS rewrite, no tests |

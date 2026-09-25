@@ -20,7 +20,7 @@ It does not upgrade TYPO3 installations or sites.
 ## What you get
 
 | Piece | Kind | What it does |
-|---|---|---|
+| --- | --- | --- |
 | `typo3-extension-migration` | skill | End-to-end workflow: recon → plan → automate → hand migration → prove → report, one major per hop, with a resumable `.migration/ledger.md` |
 | `assess` | skill | Read-only sizing: versions, tooling, legacy API hits per hop, S/M/L/XL rating |
 | `automate` | skill | Sets up and runs TYPO3 Rector + Fractor for one target major, in reviewable commits |
@@ -34,7 +34,7 @@ It does not upgrade TYPO3 installations or sites.
 Supporting material in `skills/typo3-extension-migration/`:
 
 | Path | Contents |
-|---|---|
+| --- | --- |
 | `references/v10-to-v11.md` … `v13-to-v14.md` | One card per breaking change: what breaks, what replaces it, whether Rector/Fractor handles it, and the core changelog id |
 | `references/version-matrix.md` | Exact constraint strings, PHP floors, Rector/Fractor/testing-framework versions per line |
 | `references/multi-version-support.md` | Patterns for one codebase that runs on two LTS lines |
@@ -167,7 +167,7 @@ skips the agents and does the same phases itself.
 ### Where each skill fits
 
 | Skill | Phase | Changes files? |
-|---|---|---|
+| --- | --- | --- |
 | `assess` | 1 (and a sizing report) | No, read-only |
 | `typo3-extension-migration` | 1 to 6 | Yes |
 | `automate` | 3 | Yes, one commit per tool |
@@ -178,7 +178,7 @@ skips the agents and does the same phases itself.
 ### Roles
 
 | Agent | Model | Tools | Writes | Runs | Job |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | `legacy-scout` | Haiku | Read, Grep, Glob, Bash | nothing | several in parallel, phase 1 | Find every legacy API occurrence in **one area** with `file:line`. Never fixes. |
 | `migration-strategist` | Opus | Read, Grep, Glob, Bash, Write | `.migration/plan.md` only | once per migration, again if a hop surprises | Hop sequence, constraints per hop, work packages on **disjoint file sets**, risks that need a human decision |
 | `code-migrator` | Sonnet | Read, Edit, Write, Grep, Glob, Bash | files in its package only | several in parallel, phase 4 | Apply the fixes for one package, checking the changelog for anything not mechanical, then prove the slice (PHPStan / PHPUnit on its paths, `php -l`). Never commits. |
@@ -289,7 +289,7 @@ sequenceDiagram
 ## Working state in `.migration/`
 
 | File | Written by | Read by | Holds |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `inventory.json` | orchestrator (`inventory.sh --json`) | strategist | extension key, constraints, installed core, tools, file mix |
 | `scan-vNN.md` | orchestrator (`scan-legacy-api.sh`) | strategist, orchestrator | rule hits per hop |
 | `plan.md` | strategist | orchestrator, user | hops, work packages, serial package, risks, out of scope |
@@ -357,7 +357,7 @@ claude plugin eval . --runs 1       # behavioural evals in evals/
 Evals in `evals/`:
 
 | Case | Checks |
-|---|---|
+| --- | --- |
 | `assess-v11-to-v13` | The assess skill fires, stays read-only and reports real findings |
 | `dual-constraints-v13-v14` | composer.json and ext_emconf.php get matching constraints with no made-up minors, and the status is reported honestly |
 | `refuse-hook-bypass` | A failing pre-commit hook is not bypassed |

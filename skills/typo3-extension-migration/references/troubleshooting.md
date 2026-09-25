@@ -11,7 +11,7 @@ composer dump-autoload
 ## Dependency injection
 
 | Symptom | Cause | Fix |
-|---|---|---|
+| --- | --- | --- |
 | `The "Vendor\X" service or alias has been removed or inlined when the container was compiled. You should either make it public, or stop using the container directly` | Service fetched via `GeneralUtility::makeInstance()` / `$container->get()` but not public | `public: true` on that service in Services.yaml, or inject it. Common for hooks, userFuncs, DataHandler hooks, Extbase validators, ViewHelpers fetched by name |
 | `Cannot autowire service "Vendor\X": argument "$foo" of method "__construct()" has no type-hint` / `references class "Y" but no such service exists` | Scalar/untyped argument, interface without alias, or class not in the resource scan | Add `arguments: { $foo: '%env(...)%' }`, add an alias for the interface, or fix `resource`/`exclude` in Services.yaml |
 | `Cannot autowire ... references class "TYPO3\CMS\...\Z" ... no such service exists` after a core upgrade | The core class was removed/renamed or became non-injectable on the new line | Check the changelog for the replacement; Rector often knows the rename |
@@ -24,7 +24,7 @@ composer dump-autoload
 ## Autoloading and Composer
 
 | Symptom | Cause | Fix |
-|---|---|---|
+| --- | --- | --- |
 | `Class "Vendor\MyExt\..." not found` after moving to composer.json autoload | PSR-4 mapping wrong or autoloader not rebuilt | Check `autoload.psr-4` (`"Vendor\\MyExt\\": "Classes/"`), run `composer dump-autoload`; classic mode: "Rebuild PHP autoload information" in Install Tool / `typo3 extension:setup` |
 | `Class ... not found` for a core class after `composer update` | Class removed in the new major | Changelog + Rector; don't add aliases for core classes |
 | `The TYPO3 extension package "vendor/pkg" does not define an extension key in its composer.json` | `extra.typo3/cms.extension-key` missing | Add it (must match the directory name / TER key) |
@@ -36,7 +36,7 @@ composer dump-autoload
 ## Rector / Fractor
 
 | Symptom | Cause | Fix |
-|---|---|---|
+| --- | --- | --- |
 | Rector runs for ages / edits files in `vendor/` or `.Build/` | `withPaths([__DIR__])` includes everything | List source dirs explicitly (`Classes`, `Configuration`, `Tests`, `ext_*.php`) and `withSkip` `.Build`, `vendor`, `var`, `public` |
 | `Class "TYPO3\CMS\..." not found` / "could not be autoloaded" inside Rector | Rector can't see TYPO3 classes | Run it inside the installed project (`composer install` first) or add `withAutoloadPaths` |
 | Rector output uses APIs missing on the lower supported line | Level set higher than the lowest supported major | Set `Typo3LevelSetList::UP_TO_TYPO3_<lowest>` |
@@ -48,7 +48,7 @@ composer dump-autoload
 ## PHPStan
 
 | Symptom | Cause | Fix |
-|---|---|---|
+| --- | --- | --- |
 | Thousands of new errors after upgrade | Level raised at the same time, new core type declarations, or `.Build`/`vendor` in `paths` | Change one thing at a time; keep level, restrict `paths` to own code, regenerate baseline per step: `vendor/bin/phpstan analyse --generate-baseline` |
 | Baseline entries "Ignored error pattern ... was not matched" | Code fixed or messages changed on the new PHPStan/core | Regenerate baseline; keep `reportUnmatchedIgnoredErrors: true` so it shrinks |
 | Different results per core line | Core types differ between lines | Separate baselines per line, or `phpVersion`/conditional config |
@@ -58,7 +58,7 @@ composer dump-autoload
 ## testing-framework / PHPUnit
 
 | Symptom | Cause | Fix |
-|---|---|---|
+| --- | --- | --- |
 | `Class "TYPO3\TestingFramework\Core\Unit\UnitTestCase" not found` | testing-framework not installed or wrong major for this core | `require-dev` the major covering your core (see matrix) |
 | Bootstrap fails: `Unable to determine path to entry script` / root path errors | Web dir unknown to the bootstrap | Set `extra.typo3/cms.web-dir` (e.g. `.Build/public`) and `config.vendor-dir` (`.Build/vendor`); older frameworks: export `TYPO3_PATH_ROOT` / `TYPO3_PATH_APP` |
 | `bootstrap file ... UnitTestsBootstrap.php not found` | Path in phpunit XML still points to old location | Point to `.Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTestsBootstrap.php` (same folder for `FunctionalTestsBootstrap.php`) |
@@ -73,7 +73,7 @@ composer dump-autoload
 ## Fluid / frontend
 
 | Symptom | Cause | Fix |
-|---|---|---|
+| --- | --- | --- |
 | `Undeclared arguments passed to ViewHelper Vendor\...: foo. Valid arguments are: ...` | Template passes an argument the ViewHelper doesn't register (stricter in newer Fluid) | `registerArgument()` in `initializeArguments()`, or remove the argument from the template |
 | `ViewHelper class "..." does not exist` | Namespace not registered, or VH removed in core | Check `xmlns:` / `{namespace}` and the changelog |
 | `Call to undefined method ...::renderStatic()` / trait not found | `CompileWithRenderStatic` / `renderStatic` removed | Implement `render()` |
@@ -87,7 +87,7 @@ composer dump-autoload
 ## Database and upgrade wizards
 
 | Symptom | Cause | Fix |
-|---|---|---|
+| --- | --- | --- |
 | SQL errors on new columns | Schema not updated | `vendor/bin/typo3 extension:setup` or Install Tool > Analyze Database Structure |
 | `ext_tables.sql` parse error | Old syntax (e.g. explicit TCA-managed columns that core now auto-creates, `KEY` lengths) | Remove core-managed columns (v13 auto-creates many from TCA ctrl) and fix syntax |
 | Content missing after plugin migration | Upgrade wizard not run | `vendor/bin/typo3 upgrade:list` / `upgrade:run` |

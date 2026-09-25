@@ -6,7 +6,7 @@ Source of truth for constraints, tooling versions and set names. Checked 2026-09
 ## Core lines
 
 | Major | LTS minor | LTS released | Regular support ends | ELTS ends (paid) | PHP (min - max) |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | 10 | 10.4 | 2020-04-21 | 2023-04-30 | 2027-04-30 | 7.2 - 7.4 |
 | 11 | 11.5 | 2021-10-05 | 2024-10-31 | 2028-10-31 | 7.4.1 - 8.3 |
 | 12 | 12.4 | 2023-04-25 | 2026-04-30 | 2030-04-30 | 8.1 - 8.4 |
@@ -19,7 +19,7 @@ Pre-LTS sprint releases (x.0 - x.3 before the LTS) are unsupported once the LTS 
 ## Constraints to write
 
 | Target | composer.json `require` | ext_emconf.php `constraints.depends.typo3` | PHP in composer.json | ext_emconf `php` |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | v10 | `"typo3/cms-core": "^10.4"` | `'10.4.0-10.4.99'` | `"^7.2"` | `'7.2.0-7.4.99'` |
 | v11 | `"typo3/cms-core": "^11.5"` | `'11.5.0-11.5.99'` | `"^7.4 \|\| ^8.0"` | `'7.4.0-8.3.99'` |
 | v12 | `"typo3/cms-core": "^12.4"` | `'12.4.0-12.4.99'` | `"^8.1"` | `'8.1.0-8.4.99'` |
@@ -42,7 +42,7 @@ ext_emconf.php status:
 ## Tooling per target
 
 | Target | typo3/testing-framework | PHPUnit | saschaegerer/phpstan-typo3 | PHPStan |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | v10 | `^6` | 8.4 / 9 | `^1.9` (1.10.0 is the last one covering 10.4) | 1.x |
 | v11 | `^6` or `^7` | 9 / 10 | `^1.10` | 1.x |
 | v12 | `^7` or `^8` | 10 / 11 | `^1.10` | 1.x |
@@ -61,7 +61,7 @@ phpstan-typo3 has no single major covering v13 and v14. For a 13+14 matrix requi
 - Classes: `Ssch\TYPO3Rector\Set\Typo3LevelSetList` (cumulative) and `Ssch\TYPO3Rector\Set\Typo3SetList` (single major).
 
 | Target | Level set (use this) | Single-version set | `RemoveTypo3VersionChecksRector::TARGET_VERSION` |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | v10 | `Typo3LevelSetList::UP_TO_TYPO3_10` | `Typo3SetList::TYPO3_10` | 10 |
 | v11 | `Typo3LevelSetList::UP_TO_TYPO3_11` | `Typo3SetList::TYPO3_11` | 11 |
 | v12 | `Typo3LevelSetList::UP_TO_TYPO3_12` | `Typo3SetList::TYPO3_12` | 12 |
@@ -85,7 +85,7 @@ does not exist on the lower line.
 ### Coding standards (`typo3/coding-standards`)
 
 | Version | PHP |
-|---|---|
+| --- | --- |
 | 0.9 | ^8.2 |
 | 0.8 | ^8.1 |
 | 0.7 | ^8.0 |
@@ -96,7 +96,7 @@ Run php-cs-fixer on one fixed PHP job in CI rather than across the matrix.
 ## Constraint mistakes to catch
 
 | Mistake | Why it breaks | Correct |
-|---|---|---|
+| --- | --- | --- |
 | `^14.4`, `^13.5`, `^12.5`, `^11.6` | The minor does not exist; Composer cannot resolve. LTS is the last minor of each line. | `^14.3`, `^13.4`, `^12.4`, `^11.5` |
 | `'14.4.0-14.4.99'` or `'13.0.0-13.9.99'` in ext_emconf | Wrong upper bound; the Extension Manager rejects the extension or allows versions that don't exist | `'14.3.0-14.3.99'`, `'13.4.0-13.4.99'` |
 | Replacing `^12.4` with `^13.4` while the plan says "support 12 and 13" | Drops the old line without anyone noticing | `^12.4 \|\| ^13.4`, and check the CI matrix still has a 12 job |

@@ -52,7 +52,7 @@ Prefer detecting the API itself over comparing version numbers. Version numbers 
 changes that have no symbol to test for.
 
 | Technique | Use when | Example |
-|---|---|---|
+| --- | --- | --- |
 | `class_exists()` / `interface_exists()` | A class was added or removed | `class_exists(\TYPO3\CMS\Core\Attribute\AsEventListener::class)` |
 | `method_exists()` | A method was added, renamed or removed | `method_exists($request, 'getAttribute')` |
 | `Typo3Version` | Behaviour changed without a symbol change | see below |
@@ -142,7 +142,7 @@ return $tca;
 Test every declared line at both ends of its PHP range. Minimum for 13+14:
 
 | TYPO3 | PHP | Composer | Jobs |
-|-------|-----|----------|------|
+| --- | --- | --- | --- |
 | ^13.4 | 8.2 | `--prefer-lowest` | unit, functional |
 | ^13.4 | 8.5 | highest | unit, functional, phpstan |
 | ^14.3 | 8.2 | highest | unit, functional |

@@ -7,7 +7,7 @@ Everything else is either Fractor (`a9f/typo3-fractor`) or manual. Run Fractor w
 ## Automation coverage
 
 | Area | Fractor | Manual |
-|---|---|---|
+| --- | --- | --- |
 | TypoScript / TSconfig | Legacy conditions to Symfony expression syntax, `getTSFE()` in conditions, `loginUser`/`usergroup` conditions, `page` conditions, `<INCLUDE_TYPOSCRIPT:>` to `@import`, removed `config.*` options (e.g. `config.language`, `sys_language_*`, `concatenateJs/Css`, `simulateStaticDocuments`), `typolink.useCacheHash`, removed TSconfig options | Moving files to the auto-load locations, static template to Site Set, `lib.*` rewrites, custom userFunc conditions, data processors |
 | FlexForm XML | Remove `<TCEforms>` wrapper, `items` to associative keys, `eval=int/double2` to `type=number`, `eval=email`, `eval=required`/`null` flags, `internal_type=folder`, colorpicker to `type=color`, password types | Switching to `type=file`, `renderType` changes not covered, sheet restructuring |
 | Fluid templates | `f:be.infobox` severity constants, `noCacheHash`/`useCacheHash` removal, `f:case default` to `f:defaultCase` | ViewHelper namespace changes, custom ViewHelpers (PHP, i.e. Rector), removed ViewHelpers, layout paths |
@@ -23,7 +23,7 @@ Full rule list: `packages/typo3-fractor/docs/typo3-fractor-rules.md` in the Frac
 ## TypoScript and TSconfig
 
 | Topic | Change | Version |
-|---|---|---|
+| --- | --- | --- |
 | Conditions | `[globalVar = ...]`, `[PIDinRootline = ...]` etc. to `[tree.rootLineIds ...]`, `[request...]`, `[site(...)]` expression syntax | Old syntax removed in v10 |
 | `getTSFE()` in conditions | Use `request.getPageArguments()`, `frontend.page`, `site()` | Deprecated in later lines; Fractor migrates |
 | Includes | `<INCLUDE_TYPOSCRIPT: source="FILE:...">` to `@import 'EXT:my_ext/Configuration/TypoScript/setup.typoscript'` | `@import` since v9; old syntax deprecated and removed later |
@@ -53,7 +53,7 @@ for parse errors after upgrading.
 ## Fluid
 
 | Topic | Change |
-|---|---|
+| --- | --- |
 | Namespaces | `{namespace x=Vendor\Ext\ViewHelpers}` or `xmlns:x="http://typo3.org/ns/Vendor/Ext/ViewHelpers"`; register global ones in `$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']` |
 | Custom ViewHelpers | Declare every argument in `initializeArguments()` (`registerArgument`). Undeclared arguments throw. Replace `renderStatic()` / `CompileWithRenderStatic` with `render()` and `$this->arguments` / `$this->renderingContext` (removed in newer Fluid) |
 | Escaping | Set `$escapeOutput`/`$escapeChildren` explicitly. Don't rely on defaults |
@@ -84,7 +84,7 @@ services:
 ## ext_localconf.php / ext_tables.php
 
 | Legacy | Replacement | Since |
-|---|---|---|
+| --- | --- | --- |
 | `ExtensionUtility::registerModule()` / `addModule()` in ext_tables.php | `Configuration/Backend/Modules.php` | v12 |
 | `IconRegistry->registerIcon()` in ext_localconf.php | `Configuration/Icons.php` | v11.4 |
 | `addPageTSConfig()` | `Configuration/page.tsconfig` | v12 |
@@ -109,7 +109,7 @@ Keep ext_localconf.php/ext_tables.php free of code that needs a request or a boo
 ## JavaScript
 
 | From | To | Since |
-|---|---|---|
+| --- | --- | --- |
 | RequireJS AMD modules (`define([...])`, `Resources/Public/JavaScript/*.js` loaded via `TYPO3/CMS/MyExt/Foo`) | Native ES modules with `import`/`export`, mapped in `Configuration/JavaScriptModules.php` | v12 (RequireJS deprecated), v13 (removed) |
 | `loadRequireJsModule('TYPO3/CMS/MyExt/Foo')` | `loadJavaScriptModule('@vendor/my-ext/foo.js')` | v12 |
 | jQuery-dependent backend JS | Core no longer guarantees jQuery for new modules; use native DOM / Lit | v12+ |
