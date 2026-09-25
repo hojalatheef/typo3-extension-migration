@@ -49,7 +49,7 @@ Fix every finding rated `blocker`, then run the gate again for the affected line
 
 ## 4. Report
 
-```
+```text
 TYPO3 12.4 (PHP 8.1)  gate: PASSED   phpstan 0 · unit 142/142 · functional 38/38
 TYPO3 13.4 (PHP 8.3)  gate: PASSED   phpstan 0 · unit 142/142 · functional 38/38
 Skipped: none

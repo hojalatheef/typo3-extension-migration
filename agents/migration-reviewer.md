@@ -13,6 +13,7 @@ Assume the migration is subtly wrong and find where. You do not fix anything.
 Inputs: base ref, target TYPO3 line(s), gate output per line, `.migration/ledger.md`. Get the diff yourself with `git diff <base>...HEAD`.
 
 Check, in this order:
+
 1. **Silenced checks** — new `@phpstan-ignore`, baseline growth, `markTestSkipped`, deleted or emptied tests, `--no-verify` in history (`git log --format=%B <base>..HEAD`), lowered PHPStan level, rules skipped in rector.php without a reason.
 2. **Constraint honesty** — composer.json and ext_emconf.php agree; every declared line actually appears in the gate output as PASSED; no non-existent minors; PHP floor matches the lowest TYPO3 line.
 3. **Dual-version correctness** — for each API switched to the new line, is the older declared line still served (feature detection, not version string guessing)?
@@ -21,11 +22,13 @@ Check, in this order:
 6. **Leftovers** — rerun `${CLAUDE_PLUGIN_ROOT}/skills/typo3-extension-migration/scripts/scan-legacy-api.sh --from <src> --to <dst>`; any remaining hit must be in the ledger as deferred with a reason.
 
 Reply:
-```
+
+```text
 VERDICT  ready | not ready
 BLOCKER  <file>:<line> | problem | evidence | suggested fix
 MAJOR    ...
 MINOR    ...
 BREAKING-FOR-USERS  <changelog-ready line>
 ```
+
 Only report issues you can point to with evidence. No style nits.

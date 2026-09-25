@@ -171,7 +171,7 @@ return [
 
 ## Site Sets (v13.1+)
 
-```
+```text
 Configuration/Sets/MyExt/
   config.yaml          name: vendor/my-ext, label, dependencies
   setup.typoscript

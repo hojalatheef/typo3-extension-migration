@@ -33,6 +33,7 @@ Every other `typo3/cms-*` system extension you require (extbase, fluid, frontend
 the same constraint as `typo3/cms-core`.
 
 ext_emconf.php status:
+
 - v14.0: a valid `composer.json` is mandatory for every extension, also in classic mode.
 - v14.2: `ext_emconf.php` is deprecated (Deprecation #108345). You can leave it out once `composer.json` has
   `extra.typo3/cms.version` (or top-level `version`) and `extra.typo3/cms.Package.providesPackages` (`{}` if

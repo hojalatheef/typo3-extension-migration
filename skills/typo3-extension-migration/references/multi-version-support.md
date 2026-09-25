@@ -40,6 +40,7 @@ ext_emconf.php (still needed for v13 classic mode and TER):
 ```
 
 Rules:
+
 - The PHP lower bound is the lower line's minimum; do not use syntax newer than that (e.g. no PHP 8.3 typed
   class constants if 8.2 is still allowed).
 - The Rector level is the lower line (`UP_TO_TYPO3_13` for 13+14). Rules for the higher line are applied only

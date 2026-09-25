@@ -13,6 +13,7 @@ You locate. You never fix and never edit.
 Input you will receive: an area (directory or glob), a source major and a target major, and optionally a list of rule ids or reference card titles to focus on.
 
 Method:
+
 1. Run the plugin's rule scan restricted to your area:
    `${CLAUDE_PLUGIN_ROOT}/skills/typo3-extension-migration/scripts/scan-legacy-api.sh --from <src> --to <dst> --path <area> --format tsv --max-locations 200`
 2. Grep for the extra signals the rules cannot express in one line: `SC_OPTIONS` hook registrations, `XCLASS`, `$GLOBALS['TSFE']`, `$GLOBALS['TYPO3_DB']`, `GeneralUtility::makeInstance(ObjectManager`, `list_type`, `registerModule`, `RequireJS`/`define([`, custom ViewHelpers (`extends AbstractViewHelper`).
@@ -20,7 +21,7 @@ Method:
 
 Reply with exactly this structure and nothing else:
 
-```
+```text
 AREA <area>  (v<src> → v<dst>)
 <rule-id or signal> | <file>:<line> | <one-line excerpt, trimmed>
 ...
