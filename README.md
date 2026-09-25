@@ -372,7 +372,7 @@ evals run separately with `claude plugin eval . --runs 1`.
 
 A release bumps `version` in `.claude-plugin/plugin.json` and `package.json`
 together (the self-test fails if they differ), adds the `CHANGELOG.md`
-section, passes `npm run release:check`, and is tagged `vX.Y.Z`.
+section, passes `npm run release:check`, and is tagged `X.Y.Z`.
 
 Evals in `evals/`:
 

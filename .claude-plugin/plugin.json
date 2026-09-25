@@ -1,7 +1,7 @@
 {
   "name": "typo3-extension-migration",
   "displayName": "TYPO3 Extension Migration",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Migrate TYPO3 extensions across LTS lines (v10 to v14): inventory, rule-driven legacy API scan, Rector/Fractor automation, multi-agent migration and a hard quality gate.",
   "author": {
     "name": "Hoja Mustaffa Abdul Latheef",

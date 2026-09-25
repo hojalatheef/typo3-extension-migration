@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-25
+
 ### Added
 
 - `scripts/changelog-lookup.sh`: prints the official TYPO3 core changelog entry for a changelog id, issue number or keyword, from the vendor core or a cached sparse clone of `TYPO3/typo3`. The main skill, `code-migrator` and `migration-reviewer` use it instead of guessing.

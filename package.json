@@ -1,6 +1,6 @@
 {
   "name": "typo3-extension-migration",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Claude Code plugin for migrating TYPO3 extensions across LTS lines (v10 to v14). This package only runs the repository's checks; it is not published to npm.",
   "homepage": "https://github.com/hojalatheef/typo3-extension-migration",
