@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- v12 → v13 card "ext_tables.sql: columns now derived from TCA": new **Keep** list (tables without TCA, non-TCA columns, indexes, MM tables with their own `uid` key) and a **Prove it** step with before/after schema compare and the changes to expect on 14.3.
+- v12 → v13 card "TCA ctrl `cruser_id` leftover": also remove hard-coded writes in import code; the DB compare drops the column in two runs.
+- Troubleshooting: rows for a schema compare that silently printed nothing, `Duplicate entry` on an auto-created MM table, and `Unknown column 'cruser_id'`.
+
 ## [1.0.0] - 2026-09-25
 
 ### Added
