@@ -4,7 +4,7 @@
 
 set -uo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$root"
+cd "$root" || exit 2
 skill="skills/typo3-extension-migration"
 fail=0
 ok()   { printf '  ok    %s\n' "$1"; }
@@ -44,7 +44,7 @@ for t in "$skill"/data/rules-*.tsv; do
     n=$((n+1)); [[ $n -eq 1 || -z "$line" || "$line" == \#* ]] && continue
     cols="$(awk -F'\t' '{print NF}' <<<"$line")"
     [[ "$cols" == 6 ]] || { bad "$t:$n has $cols columns"; continue; }
-    IFS=$'\t' read -r id target level ext regex hint <<<"$line"
+    IFS=$'\t' read -r _ target level _ regex _ <<<"$line"
     [[ "$target" =~ ^1[0-5]$ ]] || bad "$t:$n target '$target'"
     [[ "$level" =~ ^(removed|breaking|deprecated)$ ]] || bad "$t:$n level '$level'"
     echo | grep -E -- "$regex" >/dev/null 2>&1; [[ $? -le 1 ]] || bad "$t:$n regex does not compile: $regex"
